@@ -1,9 +1,13 @@
 package br.com.nglauber.intelsoftwaredaydemo;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 import com.squareup.otto.Bus;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -52,15 +57,33 @@ public class DetalheLivroFragment extends Fragment {
 
         this.livro = (Livro)getArguments().getSerializable("livro");
 
-        View view = inflater.inflate(R.layout.fragment_detalhe_livro, container, false);
+        final View view = inflater.inflate(R.layout.fragment_detalhe_livro, container, false);
 
-        ImageView imgCapa = (ImageView)view.findViewById(R.id.imgCapa);
-        TextView txtTitulo = (TextView)view.findViewById(R.id.txtTitulo);
-        TextView txtAno = (TextView)view.findViewById(R.id.txtAno);
+        final ImageView imgCapa = (ImageView)view.findViewById(R.id.imgCapa);
+        final TextView txtTitulo = (TextView)view.findViewById(R.id.txtTitulo);
+        final TextView txtAno = (TextView)view.findViewById(R.id.txtAno);
         TextView txtAutor = (TextView)view.findViewById(R.id.txtAutor);
         TextView txtPaginas = (TextView)view.findViewById(R.id.txtPaginas);
 
-        Picasso.with(getActivity()).load(livro.capa).into(imgCapa);
+        Picasso.with(getActivity()).load(livro.capa).into(imgCapa, new Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = ((BitmapDrawable)imgCapa.getDrawable()).getBitmap();
+
+                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                    public void onGenerated(Palette p) {
+
+                        txtTitulo.setTextColor(p.getVibrantColor(Color.BLACK));
+                        txtAno.setTextColor(p.getLightMutedColor(Color.BLACK));
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         txtTitulo.setText(livro.titulo);
         txtAno.setText(String.valueOf(livro.ano));
         txtAutor.setText(livro.autor);
