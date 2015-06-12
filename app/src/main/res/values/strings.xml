@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">IntelSoftwareDayDemo</string>
+    <string name="titulo_detalhe">Detalhes</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="tab_livros">Livros</string>
+    <string name="tab_favoritos">Favoritos</string>
+
+    <string name="compartilhar">Compartilhar</string>
+    <string name="favorito">Favorito</string>
+    <string name="erro_carregar_livro">Erro ao carregar lista de livros</string>
+</resources>
